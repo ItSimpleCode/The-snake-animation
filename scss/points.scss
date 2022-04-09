@@ -1,0 +1,90 @@
+// Vars
+$bg_color: #000000;
+$point_width: 25px;
+$point_light: white;
+$points: 26;
+$animation: ease-in-out infinite;
+$duration: 2;
+
+// Global
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: $bg_color;
+    height: 100vh;
+    position: relative;
+    perspective: 500px;
+}
+
+// points
+.points {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    column-gap: $point_width;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform-style: perserve-3d;
+    transform: translate(-50%, -50%) rotateX(70deg);
+
+    div {
+        height: $point_width;
+        border-radius: 50%;
+        position: relative;
+        perspective: $point_width;
+        filter: drop-shadow(0 0 25px $point_light);
+
+        &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform-style: perserve-3d;
+            transform: translate(0, -50%) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            border-radius: 50%;
+            width: $point_width;
+            height: $point_width;
+        }
+
+        @for $i from 1 through $points {
+            @if ($i !=1) {
+                &:nth-child(#{$i})::before {
+                    animation: point #{$duration}s #{$i * $duration * 0.05}s $animation;
+                }
+            }
+
+            @else {
+                &:nth-child(#{$i})::before {
+                    animation: point #{$duration}s #{$i * $duration * 0.05}s $animation;
+                    width: $point_width * 2;
+                    height: $point_width * 2;
+                }
+            }
+        }
+    }
+
+
+}
+
+@keyframes point {
+    0% {
+        background-color: $point_light;
+    }
+
+    50% {
+        left: 100%;
+        transform: translate(-100%, -50%);
+    }
+
+    100% {
+        background-color: $point_light;
+    }
+}
+
+// animation: point 12s $animation;
